@@ -1,4 +1,4 @@
-src/main.d: ../src/main.cpp \
+src/main.d: ../src/main.cpp ../src/main.hpp ../src/DeepSergal.hpp \
  /home/cristopher/workspace/caffe/distribute/include/caffe/caffe.hpp \
  /home/cristopher/workspace/caffe/distribute/include/caffe/blob.hpp \
  /home/cristopher/workspace/caffe/distribute/include/caffe/common.hpp \
@@ -20,6 +20,10 @@ src/main.d: ../src/main.cpp \
  /home/cristopher/workspace/caffe/distribute/include/caffe/util/io.hpp \
  /home/cristopher/workspace/caffe/distribute/include/caffe/util/format.hpp \
  /home/cristopher/workspace/caffe/distribute/include/caffe/util/upgrade_proto.hpp
+
+../src/main.hpp:
+
+../src/DeepSergal.hpp:
 
 /home/cristopher/workspace/caffe/distribute/include/caffe/caffe.hpp:
 

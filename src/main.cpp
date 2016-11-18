@@ -6,22 +6,17 @@
 // Description :
 //============================================================================
 
-#include <iostream>
-#include <caffe/caffe.hpp>
-#ifdef USE_OPENCV
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#endif  // USE_OPENCV
-#include <algorithm>
-#include <iosfwd>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
+# include "main.hpp"
 
-
+using namespace std;
 
 int main(int argc, char *argv[]) {
-
+	::google::InitGoogleLogging(argv[0]);
+	const string model_file("src/model/deploy.prototxt");
+	const string input_image("src/train/train-0001.png");
+	const string output_image("src/out/out-0001.png");
+	DeepSergal ds(model_file);
+	ds.ProcessImage(input_image, output_image);
+	return 0;
 }
+

@@ -21,20 +21,18 @@
 #include <string>
 #include <utility>
 #include <vector>
-//#include <caffe/net.hpp>
 
 using namespace caffe;
 using std::string;
 
 class DeepSergal {
 public:
-	DeepSergal(const string& model_file,
-			   const string& trained_file,
-			   const string& mean_file,
-			   const string& label_file);
+	DeepSergal(const string& model_file);
 	virtual ~DeepSergal();
+	int ProcessImage(const string& input_image, const string& output_image);
 private:
 	shared_ptr<Net<float> > net_;
+	cv::Size input_geometry_;
 };
 
 #endif /* DEEPSERGAL_HPP_ */
