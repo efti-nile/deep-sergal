@@ -27,7 +27,7 @@ using std::string;
 
 class DeepSergal {
 public:
-	DeepSergal(const string& model_file);
+	DeepSergal(const string& model_file, const string& trained_file);
 	virtual ~DeepSergal();
 	int ProcessImage(const string& input_image, const string& output_image);
 private:
