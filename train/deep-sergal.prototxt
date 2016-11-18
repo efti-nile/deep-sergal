@@ -1,0 +1,103 @@
+name: "DeepSergal"
+# TRAIN INPUT ###############################
+layer {
+  name: "sketch"
+  type: "Data"
+  top: "sketch"
+  top: "sketch-label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "sketches_lmdb"
+    batch_size: 1
+    backend: LMDB
+  }
+}
+layer {
+  name: "line"
+  type: "Data"
+  top: "line"
+  top: "line-label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "lines_lmdb"
+    batch_size: 1
+    backend: LMDB
+  }
+}
+# TEST INPUT ###############################
+layer {
+  name: "sketch"
+  type: "Data"
+  top: "sketch"
+  top: "sketch-label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "sketches_lmdb_"
+    batch_size: 1
+    backend: LMDB
+  }
+}
+layer {
+  name: "line"
+  type: "Data"
+  top: "line"
+  top: "line-label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "lines_lmdb_"
+    batch_size: 1
+    backend: LMDB
+  }
+}
+# CONVOLTION #################################
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "sketch"
+  top: "conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 3
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+# LOSS LAYER
+layer {
+  name: "loss"
+  type: "EuclideanLoss"
+  bottom: "conv1"
+  bottom: "line"
+  top: "loss"
+}
