@@ -3,8 +3,11 @@
 # N.B. set the path to the imagenet train + val data dirs
 set -e
 
+# Folder for output folders "sketches_lmdb" and "lines_lmdb" with generated lmdb databases
 EXAMPLE=./
+# Folder with "sketches-train.txt" and "lines-train.txt" files containing input images list
 DATA=data
+# Folder with tools
 TOOLS=tools
 
 TRAIN_DATA_ROOT=/home/cristopher/workspace/deep-sergal/train/sketches/
@@ -12,17 +15,6 @@ VAL_DATA_ROOT=/home/cristopher/workspace/deep-sergal/train/lines/
 
 rm -rf $EXAMPLE/sketches_lmdb
 rm -rf $EXAMPLE/lines_lmdb
-
-# Set RESIZE=true to resize the images to 256x256. Leave as false if images have
-# already been resized using another tool.
-RESIZE=false
-if $RESIZE; then
-  RESIZE_HEIGHT=100
-  RESIZE_WIDTH=100
-else
-  RESIZE_HEIGHT=0
-  RESIZE_WIDTH=0
-fi
 
 if [ ! -d "$TRAIN_DATA_ROOT" ]; then
   echo "Error: TRAIN_DATA_ROOT is not a path to a directory: $TRAIN_DATA_ROOT"
@@ -40,22 +32,16 @@ fi
 
 echo "Creating train lmdb..."
 
-GLOG_logtostderr=1 $TOOLS/convert_imageset \
-    --resize_height=$RESIZE_HEIGHT \
-    --resize_width=$RESIZE_WIDTH \
-    --shuffle \
+GLOG_logtostderr=1 $TOOLS/convert_imageset --gray=True \
     $TRAIN_DATA_ROOT \
     $DATA/sketches-train.txt \
-    $EXAMPLE/lines_lmdb
+    $EXAMPLE/sketches_lmdb
 
 echo "Creating val lmdb..."
 
-GLOG_logtostderr=1 $TOOLS/convert_imageset \
-    --resize_height=$RESIZE_HEIGHT \
-    --resize_width=$RESIZE_WIDTH \
-    --shuffle \
+GLOG_logtostderr=1 $TOOLS/convert_imageset --gray=True \
     $VAL_DATA_ROOT \
     $DATA/lines-train.txt \
-    $EXAMPLE/sketches_lmdb
+    $EXAMPLE/lines_lmdb
 
 echo "Done."

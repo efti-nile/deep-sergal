@@ -4,7 +4,7 @@ layer {
   name: "sketch"
   type: "Data"
   top: "sketch"
-  top: "sketch-label"
+  #top: "sketch-label"
   include {
     phase: TRAIN
   }
@@ -13,7 +13,7 @@ layer {
   }
   data_param {
     source: "sketches_lmdb"
-    batch_size: 1
+    batch_size: 5
     backend: LMDB
   }
 }
@@ -21,7 +21,7 @@ layer {
   name: "line"
   type: "Data"
   top: "line"
-  top: "line-label"
+  #top: "line-label"
   include {
     phase: TRAIN
   }
@@ -30,7 +30,7 @@ layer {
   }
   data_param {
     source: "lines_lmdb"
-    batch_size: 1
+    batch_size: 5
     backend: LMDB
   }
 }
@@ -39,7 +39,7 @@ layer {
   name: "sketch"
   type: "Data"
   top: "sketch"
-  top: "sketch-label"
+  #top: "sketch-label"
   include {
     phase: TEST
   }
@@ -48,7 +48,7 @@ layer {
   }
   data_param {
     source: "sketches_lmdb_"
-    batch_size: 1
+    batch_size: 5
     backend: LMDB
   }
 }
@@ -56,7 +56,7 @@ layer {
   name: "line"
   type: "Data"
   top: "line"
-  top: "line-label"
+  #top: "line-label"
   include {
     phase: TEST
   }
@@ -65,7 +65,7 @@ layer {
   }
   data_param {
     source: "lines_lmdb_"
-    batch_size: 1
+    batch_size: 5
     backend: LMDB
   }
 }
@@ -81,16 +81,25 @@ layer {
   param {
     lr_mult: 1
   }
+  
   convolution_param {
-    pad: 11
-    num_output: 27
-    kernel_size: 23
+    pad: 2
+    num_output: 10
+    kernel_size: 5
     stride: 1
-
+    weight_filler {
+        type: "xavier"
+    }
     bias_filler {
       type: "constant"
     }
   }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
 }
 layer {
   name: "conv2"
@@ -104,15 +113,23 @@ layer {
     lr_mult: 1
   }
   convolution_param {
-    pad: 6
-    num_output: 27
-    kernel_size: 13
+    pad: 2
+    num_output: 10
+    kernel_size: 5
     stride: 1
-
+    weight_filler {
+        type: "xavier"
+    }
     bias_filler {
       type: "constant"
     }
   }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
 }
 layer {
   name: "conv3"
@@ -123,32 +140,56 @@ layer {
     lr_mult: 1
   }
   param {
-    lr_mult: 2
+    lr_mult: 1
   }
   convolution_param {
     pad: 2
-    num_output: 3
+    num_output: 10
     kernel_size: 5
     stride: 1
-
+    weight_filler {
+        type: "xavier"
+    }
     bias_filler {
       type: "constant"
     }
   }
 }
-# SPLITTING ##########################################
-
 layer {
-  name: "split"
-  type: "Split"
-  bottom: "line"
-  top: "c"
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "conv3"
+  top: "out"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  convolution_param {
+    pad: 1
+    num_output: 1
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+        type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
 }
 # LOSS LAYER #########################################
 layer {
   name: "loss"
   type: "EuclideanLoss"
-  bottom: "conv3"
+  bottom: "out"
   bottom: "line"
   top: "loss"
 }

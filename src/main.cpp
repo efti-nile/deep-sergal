@@ -13,11 +13,13 @@ using namespace std;
 int main(int argc, char *argv[]) {
 	::google::InitGoogleLogging(argv[0]);
 	const string model_file("train/deep-sergal.prototxt");
-	const string trained_file("train/deep-sergal_iter_500.caffemodel");
-	const string input_image("train/sketches/sketch-0001.png");
-	const string output_image("src/out/out-0001.png");
+	const string trained_file("train/snapshots/deep-sergal_iter_1000.caffemodel");
 	DeepSergal ds(model_file, trained_file);
-	ds.ProcessImage(input_image, output_image);
+	int i = 1;
+	while(i){
+		ds.ProcessRandomImageFromTrainingDB("sketch.png", "line.png", "out.png");
+		cin >> i;
+	}
 	return 0;
 }
 
