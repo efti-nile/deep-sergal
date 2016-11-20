@@ -7,14 +7,14 @@ test_iter: 1
 # Carry out testing every 500 training iterations.
 test_interval: 1000000
 # The base learning rate, momentum and the weight decay of the network.
-base_lr: 0.05
+base_lr: 1
 lr_policy: "fixed"
 momentum: 0.95
 weight_decay: 0.0005
 # Display every 100 iterations
 display: 100
 # The maximum number of iterations
-max_iter: 500
+max_iter: 1000000
 # snapshot intermediate results
 snapshot: 500
 snapshot_prefix: "snapshots/deep-sergal"

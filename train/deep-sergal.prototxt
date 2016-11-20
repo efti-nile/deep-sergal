@@ -12,7 +12,7 @@ layer {
     scale: 0.00390625
   }
   data_param {
-    source: "sketches_lmdb"
+    source: "sketches-test_lmdb"
     batch_size: 5
     backend: LMDB
   }
@@ -84,7 +84,7 @@ layer {
   
   convolution_param {
     pad: 2
-    num_output: 10
+    num_output: 20
     kernel_size: 5
     stride: 1
     weight_filler {
@@ -113,9 +113,9 @@ layer {
     lr_mult: 1
   }
   convolution_param {
-    pad: 2
-    num_output: 10
-    kernel_size: 5
+    pad: 5
+    num_output: 20
+    kernel_size: 11
     stride: 1
     weight_filler {
         type: "xavier"
