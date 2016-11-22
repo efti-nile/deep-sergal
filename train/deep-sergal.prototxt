@@ -12,8 +12,8 @@ layer {
     scale: 0.00390625
   }
   data_param {
-    source: "sketches-test_lmdb"
-    batch_size: 5
+    source: "sketches_lmdb"
+    batch_size: 11
     backend: LMDB
   }
 }
@@ -30,7 +30,7 @@ layer {
   }
   data_param {
     source: "lines_lmdb"
-    batch_size: 5
+    batch_size: 11
     backend: LMDB
   }
 }
@@ -47,25 +47,8 @@ layer {
     scale: 0.00390625
   }
   data_param {
-    source: "sketches_lmdb_"
-    batch_size: 5
-    backend: LMDB
-  }
-}
-layer {
-  name: "line"
-  type: "Data"
-  top: "line"
-  #top: "line-label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "lines_lmdb_"
-    batch_size: 5
+    source: "sketches-test_lmdb"
+    batch_size: 1
     backend: LMDB
   }
 }
@@ -113,9 +96,9 @@ layer {
     lr_mult: 1
   }
   convolution_param {
-    pad: 5
-    num_output: 20
-    kernel_size: 11
+    pad: 1
+    num_output: 40
+    kernel_size: 3
     stride: 1
     weight_filler {
         type: "xavier"
@@ -143,9 +126,9 @@ layer {
     lr_mult: 1
   }
   convolution_param {
-    pad: 2
-    num_output: 10
-    kernel_size: 5
+    pad: 1
+    num_output: 40
+    kernel_size: 3
     stride: 1
     weight_filler {
         type: "xavier"
@@ -156,7 +139,7 @@ layer {
   }
 }
 layer {
-  name: "relu1"
+  name: "relu2"
   type: "ReLU"
   bottom: "conv3"
   top: "conv3"
@@ -165,6 +148,36 @@ layer {
   name: "conv4"
   type: "Convolution"
   bottom: "conv3"
+  top: "conv4"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 1
+  }
+  convolution_param {
+    pad: 1
+    num_output: 40
+    kernel_size: 3
+    stride: 1
+    weight_filler {
+        type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "conv5"
+  type: "Convolution"
+  bottom: "conv4"
   top: "out"
   param {
     lr_mult: 1
@@ -185,9 +198,14 @@ layer {
     }
   }
 }
+# Rescale out to the normal size
+
 # LOSS LAYER #########################################
 layer {
   name: "loss"
+  include {
+    phase: TRAIN
+  }
   type: "EuclideanLoss"
   bottom: "out"
   bottom: "line"

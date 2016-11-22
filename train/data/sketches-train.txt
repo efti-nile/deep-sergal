@@ -3,3 +3,9 @@ sketch-0002.png
 sketch-0003.png
 sketch-0004.png
 sketch-0005.png
+sketch-0006.png
+sketch-0007.png
+sketch-0008.png
+sketch-0009.png
+sketch-0010.png
+sketch-0011.png

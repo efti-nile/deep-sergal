@@ -3,3 +3,9 @@ line-0002.png
 line-0003.png
 line-0004.png
 line-0005.png
+line-0006.png
+line-0007.png
+line-0008.png
+line-0009.png
+line-0010.png
+line-0011.png

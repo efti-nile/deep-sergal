@@ -9,9 +9,9 @@
 
 DeepSergal::DeepSergal(const string& model_file, const string& trained_file){
 
-	Caffe::set_mode(Caffe::GPU);
+	Caffe::set_mode(Caffe::CPU);
 
-	net_.reset(new Net<float>(model_file, TRAIN));
+	net_.reset(new Net<float>(model_file, TEST));
 	net_->CopyTrainedLayersFrom(trained_file);
 
 	std::cout << "Number of inputs: " << net_->num_inputs() << std::endl;
@@ -24,7 +24,7 @@ DeepSergal::DeepSergal(const string& model_file, const string& trained_file){
 	}
 
 	//input_geometry_ = cv::Size(net_->input_blobs()[0]->width(), net_->input_blobs()[0]->height());
-	input_geometry_ = cv::Size(100, 100);
+	input_geometry_ = cv::Size(300, 450);
 	output_geometry_ = input_geometry_;
 }
 
@@ -38,9 +38,9 @@ int DeepSergal::ProcessRandomImageFromTrainingDB(const string& sketch, const str
 	cv::imwrite(sketch, sketch_mat * 256);
 
 	// Save line image from training LMDB database
-	shared_ptr< Blob<float> > line_blob = net_->blob_by_name("line");
-	cv::Mat line_mat(input_geometry_, CV_32FC1, (float *)(line_blob->mutable_cpu_data()));
-	cv::imwrite(line, line_mat * 256);
+	//shared_ptr< Blob<float> > line_blob = net_->blob_by_name("line");
+	//cv::Mat line_mat(input_geometry_, CV_32FC1, (float *)(line_blob->mutable_cpu_data()));
+	//cv::imwrite(line, line_mat * 256);
 
 	// Save output image from the last layer
 	shared_ptr< Blob<float> > out_blob = net_->blob_by_name("out");
