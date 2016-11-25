@@ -14,9 +14,9 @@ weight_decay: 0.0005
 # Display every 100 iterations
 display: 100
 # The maximum number of iterations
-max_iter: 1000
+max_iter: 1000000
 # snapshot intermediate results
-snapshot: 500
+snapshot: 5000
 snapshot_prefix: "snapshots/deep-sergal"
 # solver mode: CPU or GPU
 solver_mode: GPU

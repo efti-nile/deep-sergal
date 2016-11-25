@@ -30,6 +30,7 @@ public:
 	DeepSergal(const string& model_file, const string& trained_file);
 	virtual ~DeepSergal();
 	int ProcessRandomImageFromTrainingDB(const string& sketch, const string& line, const string& out);
+	void SaveParamsToImage(const string& out);
 private:
 	shared_ptr<Net<float> > net_;
 	cv::Size input_geometry_, output_geometry_;

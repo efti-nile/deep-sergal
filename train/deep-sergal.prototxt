@@ -13,7 +13,7 @@ layer {
   }
   data_param {
     source: "sketches_lmdb"
-    batch_size: 11
+    batch_size: 1
     backend: LMDB
   }
 }
@@ -30,7 +30,7 @@ layer {
   }
   data_param {
     source: "lines_lmdb"
-    batch_size: 11
+    batch_size: 1
     backend: LMDB
   }
 }
@@ -85,9 +85,34 @@ layer {
   top: "conv1"
 }
 layer {
+  name: "bn_conv1"
+  type: "BatchNorm"
+  bottom: "conv1"
+  top: "conv1_norm"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0  
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    use_global_stats: true
+  }
+}
+layer {
+  name: "scale1"  
+  type: "Scale"
+  bottom: "conv1_norm"
+  top: "conv1_norm_scaled_shifted"
+  scale_param {bias_term: true}
+}
+layer {
   name: "conv2"
   type: "Convolution"
-  bottom: "conv1"
+  bottom: "conv1_norm_scaled_shifted"
   top: "conv2"
   param {
     lr_mult: 1
@@ -210,4 +235,14 @@ layer {
   bottom: "out"
   bottom: "line"
   top: "loss"
+}
+
+# SUPRESS OUT IN TEST PHASE ############################
+layer {
+  name: "Silence1"
+  type: "Silence"
+  include {
+    phase: TEST
+  }
+  bottom: "out"
 }
