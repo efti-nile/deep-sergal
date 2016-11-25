@@ -73,14 +73,15 @@ int DeepSergal::ProcessRandomImageFromTrainingDB(const string& sketch, const str
 	return 0;
 }
 
-void DeepSergal::SaveParamsToImage(const string& folder_name){
+void DeepSergal::SaveParamsToImage(const string& base_folder_name){
 	const vector< Blob<float> * > &lp = net_->learnable_params();
 	int conv_layer_num = 0; // Global convolutional layer number
 	for(unsigned int blob_num = 0; blob_num < lp.size(); ++blob_num){
 		const vector< int > &shape = lp[blob_num]->shape();
 		if(shape.size() == 4){
 			std::stringstream prefix;
-			prefix << folder_name << "-" << conv_layer_num << "/";
+			prefix << base_folder_name << "-" << conv_layer_num;
+			mkdir(prefix.str().c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 			for(unsigned int out_num = 0; out_num < shape[0]; ++out_num){
 				for(unsigned int in_num = 0; in_num < shape[1]; ++in_num){
 					int offset = lp[blob_num]->offset(out_num, in_num);
@@ -90,8 +91,9 @@ void DeepSergal::SaveParamsToImage(const string& folder_name){
 					cv::Mat kernel_norm_mat(kernel_shape, CV_32FC1);
 					cv::normalize(kernel_mat, kernel_norm_mat, 0, 255, cv::NORM_MINMAX, CV_32FC1);
 					std::stringstream output_file_name;
-					output_file_name << prefix.str() << "ker-" << out_num << "-" << in_num << ".png";
+					output_file_name << prefix.str() << "/ker-" << out_num << "-" << in_num << ".png";
 					cv::imwrite(output_file_name.str(), kernel_norm_mat);
+//					std::cout << output_file_name.str() << std::endl;
 				}
 			}
 			conv_layer_num++;

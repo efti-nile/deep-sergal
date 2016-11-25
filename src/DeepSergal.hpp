@@ -21,6 +21,8 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace caffe;
 using std::string;

@@ -12,7 +12,11 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdexcept>
 
 #include "DeepSergal.hpp"
+
+std::string exec(const char* cmd);
+int main(int argc, char *argv[]);
 
 #endif /* MAIN_HPP_ */
